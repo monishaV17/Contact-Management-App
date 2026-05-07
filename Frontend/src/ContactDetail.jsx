@@ -1,6 +1,6 @@
 import "./styles/ContactDetail.css";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useCallback} from "react";
+import { useNavigate} from "react-router-dom";
 
 const API_URL="http://127.0.0.1:5000";
 
@@ -10,9 +10,14 @@ function ContactShow(){
     const [message,setMessage]=useState("");
     const navigate=useNavigate();
 
-    useEffect(()=>{fetchContacts();},[]);
+    const showMessage=(text) => {
+            setMessage(text);
+            setTimeout(() => {
+            setMessage("");
+    }, 1000);
+};
 
-    const fetchContacts= async () =>{
+    const fetchContacts=useCallback(async() =>{
         const token=localStorage.getItem("token");
     try{
         const res=await fetch(`${API_URL}/getContact`,{
@@ -23,12 +28,36 @@ function ContactShow(){
             setContacts(data.contacts || []);
         }
         else{
-            setMessage(data?.message || "Failed to fetch contacts");
+            showMessage(data.message || "Failed to fetch contacts");
         }
     }
     catch(error){
-        setMessage("Failed to connect server");
+        showMessage("Failed to connect server");
     }
+    },[]);
+useEffect(()=>{
+    fetchContacts();
+},[fetchContacts]);
+
+    async function handleDelete(contactId){
+        const token=localStorage.getItem("token");
+        try {
+            const res=await fetch(`${API_URL}/deleteContact/${contactId}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const data=await res.json();
+            if (res.ok) {
+                showMessage("Contact deleted successfully");
+                setContacts((prev) => prev.filter((contact) => contact.id !== contactId));
+            }
+            else {
+                showMessage(data.error || "Can't be delete");
+            }
+        }
+        catch (error) {
+            showMessage("Failed to connect server");
+        }
     }
     const displayContacts=search.trim() ? 
         contacts.filter((contact)=>
@@ -45,7 +74,6 @@ function ContactShow(){
                         e.preventDefault();
                     }}>
                         <input className="contact-search" type="text" placeholder="🔍 Search..." value={search} onChange={(e) => setSearch(e.target.value)}/>
-                        <button className="search-btn" type="submit">Search</button>
                     </form>
                 </div>
                 {message && <p className="message">{message}</p>}
@@ -71,8 +99,8 @@ function ContactShow(){
                                 <td>{contact.location}</td>
                                 <td>{contact.created_at}</td>
                                 <td className="action">
-                                <button className="edit-btn" type="button" onClick={() => navigate("/update")}>✎</button>
-                                <button className="delete-btn" type="button">🗑</button>
+                                <button className="edit-btn" type="button" onClick={() => navigate(`/update/${contact.id}`)}>✎</button>
+                                <button className="delete-btn" type="button" onClick={()=>handleDelete(contact.id)}>🗑</button>
                                 </td>
                             </tr>
                             ))):

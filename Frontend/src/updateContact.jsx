@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/contact.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const API_URL="http://127.0.0.1:5000";
 function UpdateContacts(){
@@ -10,33 +10,73 @@ function UpdateContacts(){
   const [location,setLocation]=useState("");
   const [message,setMessage]=useState("");
   const navigate=useNavigate();
+  const {id}=useParams();
+
+  const showMessage=(text) => {
+            setMessage(text);
+            setTimeout(() => {
+            setMessage("");
+    }, 1000);
+  }
+
+  useEffect(()=> {
+  const fetchContactById=async()=>{
+    const token=localStorage.getItem("token");
+    try{
+      const res=await fetch(`${API_URL}/getContact/${id}`,{
+        headers: {Authorization : `Bearer ${token}`
+      }
+    });
+    const data=await res.json();
+    if(res.ok && data.contacts && data.contacts.length > 0){
+      const contact=data.contacts[0];
+      setName(contact.name || "");
+      setPhone_number(contact.phone_no || "");
+      setEmail(contact.email || "");
+      setLocation(contact.location || "");
+    }
+    else{
+      showMessage(data.message || "Failed to load contacts");
+    }
+  }
+  catch(error){
+    console.log(error);
+    showMessage("Failed to connect server");
+  }
+  }
+  fetchContactById();
+},[id]);
 
   const handleSubmit=async (e)=>{
-    e.preventDeafault();
+    e.preventDefault();
     if(!name || !phone_no || !email || !location){
-      setMessage('All fields are required');
+      showMessage('All fields are required');
       return;
     }
     try{
-      const res=await fetch(`${API_URL}/updateContact`,{
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+      const token=localStorage.getItem("token");
+      const res=await fetch(`${API_URL}/updateContact/${id}`,{
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`},
         body: JSON.stringify({name,phone_no,email,location})
-      });
+      }
+      );
       const data=await res.json();
       if(res.ok){
-        setMessage('contact updated');
+        showMessage('contact updated');
         setName('');
         setPhone_number('');
         setEmail('');
         setLocation('')
       }
       else{
-        setMessage(data.error || data.message || "update failed");
+        showMessage(data.error || data.message || "update failed");
       }
     }
     catch(error){
-      setMessage('Failed to connect server');
+      console.log(error);
+      showMessage('Failed to connect server');
     }
   };
 

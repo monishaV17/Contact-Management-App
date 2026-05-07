@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 import os
 app=Flask(__name__)
 
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True, allow_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
 SECRET_KEY=os.getenv('SECRET_KEY')
 blacklist=set()
@@ -103,6 +104,20 @@ def get_contacts():
         return jsonify({"message": "Unauthorized"}),401
     try:
         cursor.execute("SELECT id,name,phone_no,email,location,created_at FROM contacts WHERE user_id=%s",(user_id,))
+        contacts=cursor.fetchall()
+        if not contacts:
+            return jsonify({"message": "No Contacts Available."}),404
+        return jsonify({"contacts": contacts}),200
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({"message": "Failed to load contacts"})
+@app.route('/getContact/<int:id>', methods=['GET'])
+def get_contactsById(id):
+    user_id=verify_token()
+    if not user_id:
+        return jsonify({"message": "Unauthorized"}),401
+    try:
+        cursor.execute("SELECT id,name,phone_no,email,location,created_at FROM contacts WHERE id=%s AND user_id=%s",(id,user_id))
         contacts=cursor.fetchall()
         if not contacts:
             return jsonify({"message": "No Contacts Available."}),404

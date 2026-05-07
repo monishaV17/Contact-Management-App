@@ -10,10 +10,17 @@ function Signup() {
     const [password,setPassword]=useState("");
     const [message,setMessage]=useState("");
 
+    const showMessage=(text) => {
+            setMessage(text);
+            setTimeout(() => {
+            setMessage("");
+    }, 1000);
+  }
+
     const handleSubmit=async (e)=>{
         e.preventDefault();
         if(!name || !email || !password){
-            setMessage('All Fields are required!');
+            showMessage('All Fields are required!');
             return;
         }
         try{
@@ -24,18 +31,18 @@ function Signup() {
             });
             const data=await res.json();
             if(res.ok){
-                setMessage(data.mesaage ||"Sign up successful");
+                showMessage(data.mesaage ||"Sign up successful");
                 setName('');
                 setEmail('');
                 setPassword('');
             }
             else{
-                setMessage(data.error || data.message || "Signup failed");
+                showMessage(data.error || data.message || "Signup failed");
             }
         }
         catch(error){
             console.error("Signup fetch error:", error);
-            setMessage('Failed to connect server');
+            showMessage('Failed to connect server');
         }
     }
 

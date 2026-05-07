@@ -10,10 +10,17 @@ function Login() {
     const [message,setMessage]=useState("");
     const navigate=useNavigate();
 
+    const showMessage=(text) => {
+            setMessage(text);
+            setTimeout(() => {
+            setMessage("");
+    }, 1000);
+  }
+
     const handleSubmit=async(e) =>{
         e.preventDefault();
         if(!email || !password){
-            setMessage('Email and Password are required!');
+            showMessage('Email and Password are required!');
             return;
         }
         try{
@@ -26,17 +33,17 @@ function Login() {
             if(res.ok){
                 localStorage.setItem("token",data.token);
                 console.log("Token:",data.token);
-                setMessage("Login Successful");
+                showMessage("Login Successful");
                 setEmail('');
                 setPassword('');
                 navigate("/contact")  
             }
             else{
-                setMessage(data.error || data.message || "Login Failed");
+                showMessage(data.error || data.message || "Login Failed");
             }
         }
         catch(error){
-            setMessage('Failed to connect server');
+            showMessage('Failed to connect server');
         }
     }
 

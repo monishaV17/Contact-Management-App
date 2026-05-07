@@ -11,10 +11,17 @@ function Contacts() {
   const [message,setMessage]=useState("");
   const navigate=useNavigate();
 
+  const showMessage=(text) => {
+            setMessage(text);
+            setTimeout(() => {
+            setMessage("");
+    }, 1000);
+  }
+
   const handleSubmit=async(e) =>{
     e.preventDefault();
     if(!name || !phone_no || !email ||!location){
-      setMessage('All Fields are required');
+      showMessage('All Fields are required');
       return;
     }
     try{
@@ -27,19 +34,19 @@ function Contacts() {
       });
       const data=await res.json().catch(() => null);
       if(res.ok){
-        setMessage('contact added!');
+        showMessage('contact added!');
         setName('');
         setPhone_number('');
         setEmail('');
         setLocation('')
       }
       else{
-        setMessage(data?.error || data?.message || "update failed");
+        showMessage(data?.error || data?.message || "update failed");
       }
     }
     catch(error){
        console.error("Request failed:", error);
-      setMessage('Failed to connect to server');
+      showMessage('Failed to connect to server');
     }
   };
   return (
