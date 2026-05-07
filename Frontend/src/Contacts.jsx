@@ -20,8 +20,8 @@ function Contacts() {
 
   const handleSubmit=async(e) =>{
     e.preventDefault();
-    if(!name || !phone_no || !email ||!location){
-      showMessage('All Fields are required');
+    if(!name || !phone_no){
+      showMessage('Name and Phone number are required');
       return;
     }
     try{
@@ -56,11 +56,11 @@ function Contacts() {
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="name">Name:</label>
-            <input id="name" type="text" placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)}/>
+            <input id="name" type="text" placeholder="Enter name" value={name} onChange={(e) => setName(e.target.value)} required/>
           </div>
             <div className="form-group">
             <label htmlFor="phone">Phone Number:</label>
-             <input id="phone" type="tel" placeholder="Enter phone number" value={phone_no} onChange={(e) => setPhone_number(e.target.value)}/>
+             <input id="phone" type="tel" placeholder="Enter phone number" value={phone_no} onChange={(e) => setPhone_number(e.target.value)} required/>
           </div>
         </div>
         <div className="form-row">

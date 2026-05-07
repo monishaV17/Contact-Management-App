@@ -119,7 +119,7 @@ form{
 }
 .message{
   position: fixed;
-  top: 100px;
+  top: 600px;
   left: 50%;
   transform: translateX(-50%);
   background: #f3e8ff;

@@ -49,8 +49,8 @@ function UpdateContacts(){
 
   const handleSubmit=async (e)=>{
     e.preventDefault();
-    if(!name || !phone_no || !email || !location){
-      showMessage('All fields are required');
+    if(!name || !phone_no){
+      showMessage('Name and Phone numbers are required');
       return;
     }
     try{

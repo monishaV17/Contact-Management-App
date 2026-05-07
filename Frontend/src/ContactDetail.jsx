@@ -62,11 +62,28 @@ useEffect(()=>{
     const displayContacts=search.trim() ? 
         contacts.filter((contact)=>
             contact.name.toLowerCase().includes(search.toLowerCase())):contacts;
+    async function handleLogout(){
+        const token=localStorage.getItem("token");
+        try{
+            await fetch(`${API_URL}/logout`,{
+                method: 'POST',
+                headers: {Authorization: `Bearer ${token}`}
+            });
+        }
+        catch(error){
+            console.log(error);
+        }
+        finally{
+            localStorage.removeItem("token");
+            navigate("/");
+            showMessage("Successfully logged out");
+        }
+    }
     return (
             <div className="container">
                 <div className="top-bar">
                     <h2>All Contacts ({contacts.length})</h2>
-                    <button className="logout-btn" type="button" onClick={() => navigate("/")}>⏻</button>
+                    <button className="logout-btn" type="button" onClick={() => handleLogout()}>⏻</button>
                 </div>
                 <div className="contact-search-wrapper">
                     <button className="add-btn" type="button" onClick={() => navigate("/contacts")}>+</button>
@@ -95,8 +112,8 @@ useEffect(()=>{
                             <tr key={contact.id}>
                                 <td>{contact.name}</td>
                                 <td>{contact.phone_no}</td>
-                                <td>{contact.email}</td>
-                                <td>{contact.location}</td>
+                                <td>{contact.email || "-"}</td>
+                                <td>{contact.location || "-"}</td>
                                 <td>{contact.created_at}</td>
                                 <td className="action">
                                 <button className="edit-btn" type="button" onClick={() => navigate(`/update/${contact.id}`)}>✎</button>

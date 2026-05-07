@@ -86,9 +86,9 @@ def add_contact():
         return jsonify({"message": "Unauthorized"}),401
     data=request.json
     name=data.get('name')
-    email=data.get('email')
+    email=data.get('email') or None
     phone_no=data.get('phone_no')
-    location=data.get('location')
+    location=data.get('location') or None
     try:
         cursor.execute("INSERT INTO contacts(user_id,name,email,phone_no,location)VALUES(%s,%s,%s,%s,%s)",(user_id,name,email,phone_no,location))
         db.commit()
@@ -133,9 +133,9 @@ def update_details(id):
         return jsonify({"message": "Unauthorized"}),401
     data=request.json
     name=data.get('name')
-    email=data.get('email')
+    email=data.get('email') or None
     phone_no=data.get('phone_no')
-    location=data.get('location')
+    location=data.get('location') or None
     try:
         cursor.execute("UPDATE contacts SET name=%s, email=%s, phone_no=%s, location=%s WHERE id=%s AND user_id=%s",(name,email,phone_no,location,id,user_id))
         db.commit()
