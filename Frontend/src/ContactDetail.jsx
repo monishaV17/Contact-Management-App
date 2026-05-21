@@ -6,7 +6,7 @@ const API_URL="http://127.0.0.1:5000";
 
 function ContactShow(){
     const [search,setSearch]=useState("");
-    const [contacts,setContacts]=useState("");
+    const [contacts,setContacts]=useState([]);
     const [message,setMessage]=useState("");
     const navigate=useNavigate();
 
@@ -63,6 +63,8 @@ useEffect(()=>{
     const displayContacts=search.trim() ? 
         contacts.filter((contact)=>
             contact.name.toLowerCase().includes(search.toLowerCase())):contacts;
+
+    
     async function handleLogout(){
         const token=localStorage.getItem("token");
         try{
@@ -125,7 +127,7 @@ useEffect(()=>{
                             ))):
                             (
                                 <tr>
-                                 <td colSpan="6">No contacts found</td>
+                                 <td colSpan="7">No contacts found</td>
                                 </tr>
                             )
                         }

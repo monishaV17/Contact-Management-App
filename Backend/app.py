@@ -20,7 +20,7 @@ def verify_token():
     if not auth_header:
         return None
     try:
-        parts=auth_header.split(" ") 
+        parts=auth_header.split(" ")
         print("PARTS:", parts) 
         token=parts[1]
         print("TOKEN:", token)
@@ -92,7 +92,7 @@ def add_contact():
             return jsonify({"message": "Phone number must be exactly 10 digits"}),400
         existing_email=None
         if email:
-            cursor.execute("SELECT * FROM contacts WHERE email=%s",(email,))
+            cursor.execute("SELECT * FROM contacts WHERE user_id=%s AND email=%s",(user_id,email,))
             existing_email=cursor.fetchone()
         if existing_email:
             return jsonify({"message": "Email already exists"}),409

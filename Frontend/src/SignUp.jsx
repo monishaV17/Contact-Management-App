@@ -31,7 +31,7 @@ function Signup() {
             });
             const data=await res.json();
             if(res.ok){
-                showMessage(data.mesaage ||"Sign up successful");
+                showMessage(data.message ||"Sign up successful");
                 setName('');
                 setEmail('');
                 setPassword('');
