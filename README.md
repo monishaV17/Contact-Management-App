@@ -98,11 +98,10 @@ python app.py
 
 ***Authentication Flow***
 
-JWT authentication is used to secure protected routes in the backend. After login, the generated token is sent from the frontend in the request headers to access contact-related APIs such as fetch, add, update, and delete operations.
+* JWT authentication is used to secure protected routes in the backend. After login, the generated token is sent from the frontend in the request headers to access contact-related APIs such as fetch, add, update, and delete operations.
+* Because the application is multi-user, the backend ensures that each user accesses only their own contact records. This makes the project more practical and closer to a real-world application design.
 
-Because the application is multi-user, the backend ensures that each user accesses only their own contact records. This makes the project more practical and closer to a real-world application design.
-
-**Future Improvements***
+***Future Improvements***
 
 * Add profile management for users
 * Add pagination for contact lists
