@@ -59,7 +59,7 @@ contact-management-app/
 6. Contact data is stored in MySQL and linked to the authenticated user.
 
 ***API Endpoints***
-`
+```
 POST   /signup
 POST   /login
 POST   /addContact
@@ -68,4 +68,49 @@ GET    /getContact/<id>
 PUT    /updateContact/<id>
 DELETE /deleteContact/<id>
 POST   /logout
-`
+```
+
+***Installation and Setup***
+
+1. Clone the repository
+```
+git clone <your-repository-link>
+cd contact-management-app
+```
+2. Setup the frontend
+```
+cd frontend
+npm install
+npm start
+```
+3. Setup the backend
+```
+cd backend
+pip install -r requirements.txt
+python app.py
+```
+4. Setup the database
+   
+* Create a MySQL database.
+* Create the required tables for users and contacts.
+* Configure database credentials in your Flask backend.
+* Make sure the backend is connected to MySQL before running the project.
+
+***Authentication Flow***
+
+JWT authentication is used to secure protected routes in the backend. After login, the generated token is sent from the frontend in the request headers to access contact-related APIs such as fetch, add, update, and delete operations.
+
+Because the application is multi-user, the backend ensures that each user accesses only their own contact records. This makes the project more practical and closer to a real-world application design.
+
+**Future Improvements***
+
+* Add profile management for users
+* Add pagination for contact lists
+* Improve UI styling and responsiveness
+* Add advanced validation for forms
+* Add duplicate email or phone handling per user
+
+***Author***
+
+Monisha V
+
