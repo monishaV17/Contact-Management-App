@@ -35,7 +35,7 @@ function Login() {
                 showMessage("Login Successful");
                 setEmail('');
                 setPassword('');
-                navigate("/contact")  
+                navigate("/contacts")  
             }
             else{
                 showMessage(data.error || data.message || "Login Failed");

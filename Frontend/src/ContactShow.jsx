@@ -90,7 +90,7 @@ useEffect(()=>{
                     <button className="logout-btn" type="button" onClick={() => handleLogout()}>⏻</button>
                 </div>
                 <div className="contact-search-wrapper">
-                    <button className="add-btn" type="button" onClick={() => navigate("/contacts")}>+</button>
+                    <button className="add-btn" type="button" onClick={() => navigate("/addContact")}>+</button>
                     <form onSubmit={(e) => {
                         e.preventDefault();
                     }}>
@@ -120,7 +120,7 @@ useEffect(()=>{
                                 <td>{contact.location || "-"}</td>
                                 <td>{contact.created_at}</td>
                                 <td className="action">
-                                <button className="edit-btn" type="button" onClick={() => navigate(`/update/${contact.id}`)}>✎</button>
+                                <button className="edit-btn" type="button" onClick={() => navigate(`/updateContact/${contact.id}`)}>✎</button>
                                 <button className="delete-btn" type="button" onClick={()=>handleDelete(contact.id)}>🗑</button>
                                 </td>
                             </tr>

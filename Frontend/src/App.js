@@ -2,18 +2,22 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import SignUp from './SignUp';
-import Contacts from './Contacts';
-import ContactDetail from './ContactDetail';
+import Contacts from './addContact';
+import ContactDetail from './ContactShow';
 import UpdateContacts from './updateContact';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login/>} />
       <Route path="/signup" element={<SignUp/>} />
-      <Route path="/contacts" element={<Contacts/>} />
-      <Route path="/Contact/" element={<ContactDetail/>}/>
-      <Route path="/update/:id" element={<UpdateContacts/>}/>
+
+      <Route element={<ProtectedRoute/>}>
+      <Route path="/addContact" element={<Contacts/>} />
+      <Route path="/contacts/" element={<ContactDetail/>}/>
+      <Route path="/updateContact/:id" element={<UpdateContacts/>}/>
+      </Route>
     </Routes>
   );
 }

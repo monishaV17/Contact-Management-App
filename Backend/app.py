@@ -96,7 +96,7 @@ def add_contact():
             existing_email=cursor.fetchone()
         if existing_email:
             return jsonify({"message": "Email already exists"}),409
-        cursor.execute("SELECT * FROM contacts WHERE phone_no=%s",(phone_no,))
+        cursor.execute("SELECT * FROM contacts WHERE user_id=%s AND phone_no=%s",(user_id,phone_no,))
         existing_phone_no=cursor.fetchone()
         if existing_phone_no:
             return jsonify({"message": "Phone number already exists"}),409
@@ -148,12 +148,25 @@ def update_details(id):
     phone_no=data.get('phone_no')
     location=data.get('location') or None
     try:
+        if not phone_no.isdigit() or len(phone_no)!=10:
+            return jsonify({"message": "Phone number must be exactly 10 digits"}),400
+        existing_email=None
+        if email:
+            cursor.execute("SELECT id FROM contacts WHERE user_id=%s AND email=%s AND id != %s",(user_id,email,id))
+            existing_email=cursor.fetchone()
+        if existing_email:
+            return jsonify({"message": "Email already exists"}),409
+        cursor.execute("SELECT id FROM contacts WHERE user_id=%s AND phone_no=%s AND id != %s",(user_id,phone_no,id))
+        existing_phone_no=cursor.fetchone()
+        if existing_phone_no:
+            return jsonify({"message": "Phone number already exists"}),409
         cursor.execute("UPDATE contacts SET name=%s, email=%s, phone_no=%s, location=%s WHERE id=%s AND user_id=%s",(name,email,phone_no,location,id,user_id))
         db.commit()
         return jsonify({"message": "Details Updated"}),200
     except Exception as e:
+        db.rollback()
         print(f"Error: {str(e)}")
-        return jsonify({"message": "Update failed"})
+        return jsonify({"message": "Update failed"}),500
 
 @app.route('/deleteContact/<int:id>', methods=['DELETE'])
 def delete(id):

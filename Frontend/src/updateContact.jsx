@@ -106,7 +106,7 @@ function UpdateContacts(){
         </div>
         <div className="btn-row">
           <button className="create-btn" type="submit">Save</button>
-           <button type="button" onClick={() => navigate("/Contact")} className="back-btn">Back to Contacts</button>
+           <button type="button" onClick={() => navigate("/contacts")} className="back-btn">Back to Contacts</button>
         </div>
       </form>
       {message && <p className="message">{message}</p>}
