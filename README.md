@@ -24,7 +24,7 @@ A multi-user contact management application built using React for the frontend a
 * Testing Tool: Postman
 * Version Control: Git and GitHub
 
-***Project Structure***
+***📁 Project Structure***
 
 ```
 contact-management-app/
